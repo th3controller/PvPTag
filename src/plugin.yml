@@ -1,0 +1,4 @@
+name: PvPTag
+version: 1.0.0
+main: net.aemservers.pvptag.PvPTag
+author: th3controller
