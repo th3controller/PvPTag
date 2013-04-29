@@ -13,6 +13,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -43,6 +45,9 @@ public class PvPTagListener implements Listener {
 	private void tagPlayer(Player player) {
 		Integer multiple = plugin.pluginsettings.get("timevalue");
 		Calendar c = Calendar.getInstance();
+		if(player.isFlying()) {
+			plugin.flyingplayers.add(player.getName());
+		}
 		plugin.playertime.put(player.getName(), c.getTimeInMillis()+multiple);
 		listmessage(player, "messages.entered-combat");
 		player.setAllowFlight(false);
@@ -104,6 +109,17 @@ public class PvPTagListener implements Listener {
 				}
 				if(plugin.playertime.containsKey(defender.getName())) {
 					tagAddTime(defender);
+				}
+			}
+		}
+	}
+	@EventHandler
+	public void onFlyingFall(EntityDamageEvent event) {
+		if(event.getEntity() instanceof Player) {
+			Player player = (Player) event.getEntity();
+			if(plugin.flyingplayers.contains(player.getName())) {
+				if(event.getCause() == DamageCause.FALL) {
+					event.setCancelled(true);
 				}
 			}
 		}

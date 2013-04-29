@@ -12,6 +12,7 @@ public class PvPTag extends JavaPlugin {
 	Logger log = Logger.getLogger("Minecraft");
 	
 	public ArrayList<String> players = new ArrayList<String>();
+	public ArrayList<String> flyingplayers = new ArrayList<String>();
 	public HashMap<String, Long> playertime = new HashMap<String, Long>();
 	public HashMap<String, Integer> pluginsettings = new HashMap<String, Integer>();
 	
