@@ -41,6 +41,9 @@ public class PvPTagListener implements Listener {
 		if(plugin.playertime.containsKey(playername)) {
 			plugin.playertime.remove(playername);
 		}
+		if(plugin.flyingplayers.contains(playername)) {
+			plugin.flyingplayers.remove(playername);
+		}
 	}
 	private void tagPlayer(Player player) {
 		Integer multiple = plugin.pluginsettings.get("timevalue");
@@ -120,6 +123,7 @@ public class PvPTagListener implements Listener {
 			if(plugin.flyingplayers.contains(player.getName())) {
 				if(event.getCause() == DamageCause.FALL) {
 					event.setCancelled(true);
+					plugin.flyingplayers.remove(player.getName());
 				}
 			}
 		}
