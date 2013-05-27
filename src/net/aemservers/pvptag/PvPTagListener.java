@@ -63,6 +63,7 @@ public class PvPTagListener implements Listener {
 		player.removePotionEffect(PotionEffectType.INVISIBILITY);
 		plugin.playertime.put(player.getName(), c.getTimeInMillis()+multiple);
 	}
+	//When player enters combat, place the tag
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onPlayercombat(EntityDamageByEntityEvent event) {
 		if(!event.isCancelled()) {
@@ -90,6 +91,7 @@ public class PvPTagListener implements Listener {
 			}
 		}
 	}
+	//If player attempts to PVP again, add more time
 	@EventHandler
 	public void onCombatTime(EntityDamageByEntityEvent event) {
 		if(event.getDamager() instanceof Player && event.getEntity() instanceof Player) {
@@ -116,6 +118,7 @@ public class PvPTagListener implements Listener {
 			}
 		}
 	}
+	//When flying, players don't take damage
 	@EventHandler
 	public void onFlyingFall(EntityDamageEvent event) {
 		if(event.getEntity() instanceof Player) {
@@ -128,6 +131,7 @@ public class PvPTagListener implements Listener {
 			}
 		}
 	}
+	//Whenever a player tries to use ender pearls while in combat, denies
 	@EventHandler
 	public void onEnderPearlUse(PlayerInteractEvent event) {
 		if(plugin.playertime.containsKey(event.getPlayer().getName())) {
@@ -141,6 +145,7 @@ public class PvPTagListener implements Listener {
 			}
 		}
 	}
+	//If a player dies while in combat, it gets removed from combat
 	@EventHandler
 	public void onCombatDeath(PlayerDeathEvent event) {
 		String name = event.getEntity().getName();
@@ -148,6 +153,7 @@ public class PvPTagListener implements Listener {
 			deleteFromMemory(name);
 		}
 	}
+	//If a player attempts to use a command while in combat, deny
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
 		if(plugin.playertime.containsKey(event.getPlayer().getName())) {
@@ -155,6 +161,7 @@ public class PvPTagListener implements Listener {
 			listmessage(event.getPlayer(), "messages.command-combat");
 		}
 	}
+	//If a player quits, place the player on death row
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		String name = event.getPlayer().getName();
@@ -163,6 +170,7 @@ public class PvPTagListener implements Listener {
 			plugin.playertime.remove(name);
 		}
 	}
+	//If a player logs in, do stuff
 	@EventHandler
 	public void onPlayerLogin(final PlayerJoinEvent event) {
 		final String name = event.getPlayer().getName();
@@ -181,6 +189,12 @@ public class PvPTagListener implements Listener {
 			plugin.playertime.remove(name);
 		}
 	}
+	/**
+	 * Adds/Checks time for the damager
+	 * @param damagername The damagers name
+	 * @param damagerplayer The damagers player entity
+	 * @param intname Name used to give the task ID
+	 */
 	public void timeCheckDamager(final String damagername, final Player damagerplayer, Integer intname) {
 		final Integer integername = intname;
 		intname = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(this.plugin, new Runnable() {
@@ -200,6 +214,12 @@ public class PvPTagListener implements Listener {
 			}
 		}, 0L, 40L);
 	}
+	/**
+	 * Adds/Checks time for the defender
+	 * @param defendername The defenders name
+	 * @param defenderplayer The defenders player entity
+	 * @param intname Name used to give the task ID
+	 */
 	public void timeCheckDefender(final String defendername, final Player defenderplayer, Integer intname) {
 		final Integer integername = intname;
 		intname = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(this.plugin, new Runnable() {
