@@ -55,7 +55,7 @@ public class PvPTagListener implements Listener {
 		listmessage(player, "messages.entered-combat");
 		player.setAllowFlight(false);
 		player.removePotionEffect(PotionEffectType.INVISIBILITY);
-		timeCheckDamager(player.getName(), player, player.getTicksLived());
+		timeCheck(player.getName(), player, player.getTicksLived());
 	}
 	private void tagAddTime(Player player) {
 		Integer multiple = plugin.pluginsettings.get("timevalue");
@@ -82,8 +82,9 @@ public class PvPTagListener implements Listener {
 				if(damager instanceof Player && event.getEntity() instanceof Player) {
 					Player defender = (Player) event.getEntity();
 					Player damagee = (Player) damager;
-					if(damager != null && !plugin.playertime.containsKey(damagee.getName()))
-					tagPlayer(damagee);
+					if(damager != null && !plugin.playertime.containsKey(damagee.getName())) {
+						tagPlayer(damagee);
+					}
 					if(defender != null && !plugin.playertime.containsKey(defender.getName())) {
 						tagPlayer(defender);
 					}
@@ -190,50 +191,25 @@ public class PvPTagListener implements Listener {
 		}
 	}
 	/**
-	 * Adds/Checks time for the damager
-	 * @param damagername The damagers name
-	 * @param damagerplayer The damagers player entity
+	 * Adds/Checks time for the player
+	 * @param playername The players name
+	 * @param player The players entity
 	 * @param intname Name used to give the task ID
 	 */
-	public void timeCheckDamager(final String damagername, final Player damagerplayer, Integer intname) {
+	public void timeCheck(final String playername, final Player player, Integer intname) {
 		final Integer integername = intname;
 		intname = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(this.plugin, new Runnable() {
 			@Override
 			public void run() {
-				if(plugin.playertime.containsKey(damagername)) {
+				if(plugin.playertime.containsKey(playername)) {
 					Calendar c = Calendar.getInstance();
-					if(c.getTimeInMillis() >= plugin.playertime.get(damagername)) {
-						listmessage(damagerplayer, "messages.depart-combat");
-						deleteFromMemory(damagername);
+					if(c.getTimeInMillis() >= plugin.playertime.get(playername)) {
+						listmessage(player, "messages.depart-combat");
+						deleteFromMemory(playername);
 						Bukkit.getScheduler().cancelTask(integername);
 					}
 				} else {
-					deleteFromMemory(damagername);
-					Bukkit.getScheduler().cancelTask(integername);
-				}
-			}
-		}, 0L, 40L);
-	}
-	/**
-	 * Adds/Checks time for the defender
-	 * @param defendername The defenders name
-	 * @param defenderplayer The defenders player entity
-	 * @param intname Name used to give the task ID
-	 */
-	public void timeCheckDefender(final String defendername, final Player defenderplayer, Integer intname) {
-		final Integer integername = intname;
-		intname = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(this.plugin, new Runnable() {
-			@Override
-			public void run() {
-				if(plugin.playertime.containsKey(defendername)) {
-					Calendar c = Calendar.getInstance();
-					if(c.getTimeInMillis() >= plugin.playertime.get(defendername)) {
-						listmessage(defenderplayer, "messages.depart-combat");
-						deleteFromMemory(defendername);
-						Bukkit.getScheduler().cancelTask(integername);
-					}
-				} else {
-					deleteFromMemory(defendername);
+					deleteFromMemory(playername);
 					Bukkit.getScheduler().cancelTask(integername);
 				}
 			}
