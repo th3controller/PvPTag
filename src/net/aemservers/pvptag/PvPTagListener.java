@@ -60,6 +60,7 @@ public class PvPTagListener implements Listener {
 	private void tagAddTime(Player player) {
 		Integer multiple = plugin.pluginsettings.get("timevalue");
 		Calendar c = Calendar.getInstance();
+		player.setAllowFlight(false);
 		player.removePotionEffect(PotionEffectType.INVISIBILITY);
 		plugin.playertime.put(player.getName(), c.getTimeInMillis()+multiple);
 	}
@@ -207,6 +208,9 @@ public class PvPTagListener implements Listener {
 						listmessage(player, "messages.depart-combat");
 						deleteFromMemory(playername);
 						Bukkit.getScheduler().cancelTask(integername);
+						if(plugin.flyingplayers.contains(player.getName())) {
+							plugin.flyingplayers.remove(player.getName());
+						}
 					}
 				} else {
 					deleteFromMemory(playername);
