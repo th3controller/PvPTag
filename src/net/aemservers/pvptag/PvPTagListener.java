@@ -168,8 +168,9 @@ public class PvPTagListener implements Listener {
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		String name = event.getPlayer().getName();
 		if(plugin.playertime.containsKey(name)) {
-			plugin.players.add(name);
-			plugin.playertime.remove(name);
+			//plugin.players.add(name);
+			//plugin.playertime.remove(name);
+			event.getPlayer().setHealth(0);
 		}
 	}
 	//If a player logs in, do stuff
