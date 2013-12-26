@@ -16,6 +16,7 @@ public class PvPTag extends JavaPlugin {
 	public HashMap<String, Long> playertime = new HashMap<String, Long>();
 	public HashMap<String, Integer> pluginsettings = new HashMap<String, Integer>();
 	
+	//Enables
 	@Override
 	public void onEnable() {
 		File file = new File("plugins/PvPTag", "config.yml");
@@ -26,6 +27,7 @@ public class PvPTag extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new PvPTagListener(this), this);
 		log.info("[PvPTag] Successfully initiated the plugin!");
 	}
+	//Disables
 	@Override
 	public void onDisable() {
 		log.info("[PvPTag] Successfully terminated the plugin!");
